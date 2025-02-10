@@ -260,7 +260,7 @@ class AIHawkJobApplier:
                 resume_file_path = os.path.abspath(self.resume_path)
                 self.job_application_page.upload_file(element, resume_file_path)
                 job_context.job.resume_path = resume_file_path
-                job_context.job_application.resume_path = str(resume_file_path)
+                job_context.job_application.resume_path = resume_file_path
                 logger.debug(f"Resume uploaded from path: {resume_file_path}")
             else:
                 logger.debug(
@@ -509,6 +509,8 @@ class AIHawkJobApplier:
         browser_utils.handle_security_checks()
         time_utils.tiny_sleep()
 
+        self.job_application_page.wait_until_ready()
+
         if self.job_application_page.is_upload_field(form_element):
             self._handle_upload_fields(form_element, job_context)
             return
@@ -536,6 +538,7 @@ class AIHawkJobApplier:
             logger.debug("Handled dropdown question")
             return
 
+    #TODO: Enhance this method to handle multi-select questions
     def _handle_radio_question(
         self,
         job_context: JobContext,
